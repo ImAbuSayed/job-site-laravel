@@ -60,4 +60,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Job::class);
     }
+
+    // Compare this snippet from job-site\app\Models\JobApplication.php:
+    public function applications()
+    {
+        return $this->hasMany(JobApplication::class);
+    }
 }
