@@ -43,13 +43,21 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    // Compare this snippet from job-site\app\Models\Role.php:
     public function role()
     {
         return $this->belongsTo(Role::class);
     }
 
+    // Compare this snippet from job-site\app\Http\Middleware\VerifyCsrfToken.php:
     public function hasRole($role)
     {
         return $this->role->name === $role;
+    }
+
+    // Compare this snippet from job-site\app\Models\Job.php:
+    public function jobs()
+    {
+        return $this->hasMany(Job::class);
     }
 }
