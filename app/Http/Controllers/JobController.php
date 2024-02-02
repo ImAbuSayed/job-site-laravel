@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('job.owner')->only(['edit', 'update', 'destroy']);
+    }
+
     // In JobController.php
     public function index()
     {
