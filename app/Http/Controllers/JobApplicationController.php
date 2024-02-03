@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Notifications\JobApplicationNotification;
 class JobApplicationController extends Controller
 {
     public function apply(Job $job)
@@ -19,10 +19,13 @@ class JobApplicationController extends Controller
 
         $resumePath = $request->file('resume')->store('resumes');
 
-        $job->applications()->create([
+        $jobApplication = $job->applications()->create([
             'user_id' => auth()->user()->id,
             'resume_path' => $resumePath,
         ]);
+
+        // Notify the job poster
+        $job->user->notify(new JobApplicationNotification($jobApplication));
 
         return redirect()->route('jobs.index')->with('success', 'Application submitted successfully!');
     }

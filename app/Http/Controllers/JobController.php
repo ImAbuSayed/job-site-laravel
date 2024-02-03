@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Job;
+use App\Notifications\JobRejectedNotification;
 
 class JobController extends Controller
 {
@@ -11,6 +12,17 @@ class JobController extends Controller
     public function __construct()
     {
         $this->middleware('job.owner')->only(['edit', 'update', 'destroy']);
+    }
+
+    public function rejectApplication(JobApplication $application)
+    {
+        // Update the application status
+        $application->update(['status' => 'rejected']);
+
+        // Notify the job seeker
+        $application->user->notify(new JobRejectedNotification($application->job));
+
+        return redirect()->back()->with('success', 'Application rejected successfully.');
     }
 
     // In JobController.php
