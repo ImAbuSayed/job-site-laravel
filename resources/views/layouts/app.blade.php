@@ -35,6 +35,20 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('home') }}">Home</a>
+                        </li>
+                        @auth
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('jobs.index') }}">Job List</a>
+                        </li>
+                            @if(auth()->user()->hasRole('Admin'))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin.dashboard') }}">Admin Dashboard</a>
+                                </li>
+                            @endif
+
+                        @endauth
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))

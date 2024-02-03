@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobApplicationController;
+use App\Http\Controllers\AdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,8 +18,12 @@ use App\Http\Controllers\JobApplicationController;
 
 Route::resource('jobs', JobController::class)->middleware('auth');
 
+Route::prefix('admin')->middleware(['auth', 'role:Admin'])->group(function () {
+    Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+});
+
 Route::prefix('jobs')->group(function () {
-    Route::get('{job}/apply', [JobApplicationController::class, 'apply'])->name('job-applications.apply');
+    Route::get('{job}/apply', [JobApplicationController::class, 'apply'])->name('job_applications.apply');
     Route::post('{job}/apply', [JobApplicationController::class, 'store']);
 });
 
