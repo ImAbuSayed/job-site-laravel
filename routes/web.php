@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\JobApplicationController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,7 +13,14 @@ use App\Http\Controllers\JobController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+// In routes/web.php
+
 Route::resource('jobs', JobController::class)->middleware('auth');
+
+Route::prefix('jobs')->group(function () {
+    Route::get('{job}/apply', [JobApplicationController::class, 'apply'])->name('job-applications.apply');
+    Route::post('{job}/apply', [JobApplicationController::class, 'store']);
+});
 
 Route::view('/', 'welcome');
 
