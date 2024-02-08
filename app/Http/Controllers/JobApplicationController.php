@@ -8,11 +8,15 @@ class JobApplicationController extends Controller
 {
     public function apply(Job $job)
     {
+        $this->authorize('create', JobApplication::class);
+
         return view('job_applications.apply', compact('job'));
     }
 
     public function store(Request $request, Job $job)
     {
+        $this->authorize('create', JobApplication::class);
+
         $request->validate([
             'resume' => 'required|mimes:pdf,doc,docx|max:2048',
         ]);

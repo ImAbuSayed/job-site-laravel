@@ -33,6 +33,6 @@
 
             </div>
         @endforeach
-        <p class="text-center">{{ $jobs->links() }}</p>
+        {{ $jobs->links() }}
         @endsection
     </div>
