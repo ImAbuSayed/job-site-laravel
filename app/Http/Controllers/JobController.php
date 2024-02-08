@@ -26,9 +26,20 @@ class JobController extends Controller
     }
 
     // In JobController.php
-    public function index()
+    public function index(Request $request)
     {
-        $jobs = Job::all();
+        if($request){
+            $jobs = Job::when($request->filled('search'), function ($query) use ($request) {
+                $query->where('title', 'like', '%' . $request->input('search') . '%')
+                    ->orWhere('description', 'like', '%' . $request->input('search') . '%');
+            })
+                ->when($request->filled('status'), function ($query) use ($request) {
+                    $query->where('status', $request->input('status'));
+                })
+                ->paginate(3);
+        } else {
+            $jobs = Job::all();
+        }
 
         return view('jobs.index', compact('jobs'));
     }
@@ -82,4 +93,5 @@ class JobController extends Controller
 
         return redirect()->route('jobs.index');
     }
+
 }
